@@ -76,7 +76,6 @@ export async function logoutAllController(
   res.status(204).send();
 }
 
-/* 
 export async function meController(req: Request, res: Response): Promise<void> {
   if (!req.authUser) {
     throw new AppError(401, "Unauthorized", "UNAUTHORIZED");
@@ -84,4 +83,3 @@ export async function meController(req: Request, res: Response): Promise<void> {
 
   res.json({ user: req.authUser });
 }
-*/
