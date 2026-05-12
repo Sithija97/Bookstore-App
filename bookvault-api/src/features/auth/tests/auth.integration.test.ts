@@ -57,13 +57,13 @@ async function seedAndLogin(
   app: ReturnType<typeof createApp>,
   email = "reader@example.com",
 ) {
-  await request(app).post("/auth/register").send({
+  await request(app).post("/api/auth/register").send({
     email,
     password: "Password123!",
     name: "Reader",
   });
 
-  const loginResponse = await request(app).post("/auth/login").send({
+  const loginResponse = await request(app).post("/api/auth/login").send({
     email,
     password: "Password123!",
   });
@@ -106,7 +106,7 @@ describe("auth integration", () => {
     const { accessToken, refreshToken, csrfToken } = await seedAndLogin(app);
 
     const refreshResponse = await request(app)
-      .post("/auth/refresh")
+      .post("/api/auth/refresh")
       .set("Cookie", [
         `refresh_token=${refreshToken}`,
         `csrf_token=${csrfToken}`,
@@ -135,7 +135,7 @@ describe("auth integration", () => {
     expect(totalTokens).toBeGreaterThanOrEqual(1);
 
     const meResponse = await request(app)
-      .get("/auth/me")
+      .get("/api/auth/me")
       .set("Authorization", `Bearer ${accessToken}`);
     expect(meResponse.status).toBe(200);
   });
@@ -148,7 +148,7 @@ describe("auth integration", () => {
     );
 
     await request(app)
-      .post("/auth/refresh")
+      .post("/api/auth/refresh")
       .set("Cookie", [
         `refresh_token=${refreshToken}`,
         `csrf_token=${csrfToken}`,
@@ -158,7 +158,7 @@ describe("auth integration", () => {
       .expect(200);
 
     const reuseResponse = await request(app)
-      .post("/auth/refresh")
+      .post("/api/auth/refresh")
       .set("Cookie", [
         `refresh_token=${refreshToken}`,
         `csrf_token=${csrfToken}`,
@@ -187,7 +187,7 @@ describe("auth integration", () => {
     );
 
     await request(app)
-      .post("/auth/logout")
+      .post("/api/auth/logout")
       .set("Cookie", [
         `refresh_token=${refreshToken}`,
         `csrf_token=${csrfToken}`,
@@ -196,7 +196,7 @@ describe("auth integration", () => {
       .send({ refreshToken, csrfToken })
       .expect(204);
 
-    const loginAgain = await request(app).post("/auth/login").send({
+    const loginAgain = await request(app).post("/api/auth/login").send({
       email: "logout@example.com",
       password: "Password123!",
     });
@@ -212,7 +212,7 @@ describe("auth integration", () => {
     const secondCsrfToken = getCookieValue(setCookieHeaders2, "csrf_token");
 
     await request(app)
-      .post("/auth/logout-all")
+      .post("/api/auth/logout-all")
       .set("Authorization", `Bearer ${secondAccessToken}`)
       .set("Cookie", [
         `refresh_token=${secondRefreshToken}`,
@@ -232,7 +232,7 @@ describe("auth integration", () => {
 
     expect(activeTokens).toBe(0);
     await request(app)
-      .get("/auth/me")
+      .get("/api/auth/me")
       .set("Authorization", `Bearer ${secondAccessToken}`)
       .expect(401);
   });
