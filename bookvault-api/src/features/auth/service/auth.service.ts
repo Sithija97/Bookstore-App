@@ -60,7 +60,7 @@ export async function register(
   const tokens = await issueTokensForUser(user);
   writeSessionCookies(response, tokens);
 
-  return { user, tokens };
+  return { user, tokens: toAuthResponseTokens(tokens) };
 }
 
 export async function login(
@@ -93,7 +93,7 @@ export async function login(
   const tokens = await issueTokensForUser(user);
   writeSessionCookies(response, tokens);
 
-  return { user, tokens };
+  return { user, tokens: toAuthResponseTokens(tokens) };
 }
 
 export async function refreshSession(
@@ -150,7 +150,10 @@ export async function refreshSession(
   await markRefreshTokenRotated(oldTokenId, nextTokenId);
   writeSessionCookies(response, nextTokens);
 
-  return { user: toSafeUser(userRecord), tokens: nextTokens };
+  return {
+    user: toSafeUser(userRecord),
+    tokens: toAuthResponseTokens(nextTokens),
+  };
 }
 
 export async function logoutSingleSession(
@@ -243,6 +246,10 @@ function writeSessionCookies(response: Response, tokens: AuthTokens): void {
 function clearSessionCookies(response: Response): void {
   clearRefreshTokenCookie(response);
   clearCsrfCookie(response);
+}
+
+function toAuthResponseTokens(tokens: AuthTokens): { accessToken: string } {
+  return { accessToken: tokens.accessToken };
 }
 
 function toSafeUser(user: {

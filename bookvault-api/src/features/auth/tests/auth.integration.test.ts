@@ -116,8 +116,20 @@ describe("auth integration", () => {
 
     expect(refreshResponse.status).toBe(200);
     expect(refreshResponse.body.tokens.accessToken).toBeTypeOf("string");
-    expect(refreshResponse.body.tokens.refreshToken).toBeTypeOf("string");
-    expect(refreshResponse.body.tokens.refreshToken).not.toBe(refreshToken);
+    expect(refreshResponse.body.tokens.refreshToken).toBeUndefined();
+    expect(refreshResponse.body.tokens.csrfToken).toBeUndefined();
+
+    const refreshSetCookieHeaders = Array.isArray(
+      refreshResponse.headers["set-cookie"],
+    )
+      ? refreshResponse.headers["set-cookie"]
+      : [refreshResponse.headers["set-cookie"]];
+    const rotatedRefreshToken = getCookieValue(
+      refreshSetCookieHeaders,
+      "refresh_token",
+    );
+
+    expect(rotatedRefreshToken).not.toBe(refreshToken);
 
     const totalTokens = await RefreshTokenModel.countDocuments({});
     expect(totalTokens).toBeGreaterThanOrEqual(1);

@@ -16,9 +16,13 @@ export interface AuthTokens {
   csrfToken: string;
 }
 
+export interface AuthResponseTokens {
+  accessToken: string;
+}
+
 export interface AuthResponse {
   user: SafeUser;
-  tokens: AuthTokens;
+  tokens: AuthResponseTokens;
 }
 
 export interface AccessTokenClaims {

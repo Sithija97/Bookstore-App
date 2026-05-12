@@ -41,7 +41,6 @@ const refreshTokenSchema = new Schema<RefreshTokenDocumentData>(
     expiresAt: {
       type: Date,
       required: true,
-      index: true,
     },
     rotatedAt: {
       type: Date,
