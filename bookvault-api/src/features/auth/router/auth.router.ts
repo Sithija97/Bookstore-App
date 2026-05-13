@@ -19,7 +19,7 @@ import {
   loginController,
   logoutAllController,
   logoutController,
-  // meController,
+  meController,
   refreshController,
   registerController,
 } from "@/features/auth/controller/auth.controller";
@@ -60,6 +60,6 @@ authRouter.post(
   requireCsrfIfCookieAuth,
   asyncHandler(logoutAllController),
 );
-// authRouter.get("/me", authGuard, asyncHandler(meController));
+authRouter.get("/me", authGuard, asyncHandler(meController));
 
 export { authRouter };
