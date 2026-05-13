@@ -47,6 +47,8 @@ jobs:
 
       # Deploy the new image to the Web App using the publish profile.
       # This authenticates directly without needing a Service Principal.
+      # Note: ACR pull credentials must be configured on the Web App once via az CLI
+      # (az webapp config container set) before this step will work.
       - name: Deploy image to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
