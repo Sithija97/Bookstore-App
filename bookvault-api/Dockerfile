@@ -37,6 +37,10 @@ RUN npm install --omit=dev
 # Copy the compiled JavaScript from the builder stage
 COPY --from=builder /app/dist ./dist
 
+# Run as the built-in non-root 'node' user for security (never run as root in production)
+RUN chown -R node:node /app
+USER node
+
 # Expose the port your app listens on
 EXPOSE 3000
 

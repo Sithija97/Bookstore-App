@@ -1,12 +1,15 @@
 node_modules
-npm-debug.log
+npm-debug.log*
 dist
-test
 coverage
 .env
+.env.*
 *.md
 .git
 .gitignore
 Dockerfile
+.dockerignore
 .vscode
 scripts
+*.test.ts
+vitest.config.ts
