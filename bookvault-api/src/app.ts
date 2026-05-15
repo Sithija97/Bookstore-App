@@ -22,8 +22,12 @@ export function createApp() {
   app.use(express.json({ limit: "1mb" }));
   app.use(cookieParser());
 
+  app.get("/", (_req, res) => {
+    res.status(200).json({ message: "Welcome to BookVault API" });
+  });
+
   app.get("/health", (_req, res) => {
-    res.json({ status: "ok", service: "bookstore-app-api" });
+    res.status(200).json({ status: "ok", service: "bookstore-app-api" });
   });
 
   app.use("/api", router);
