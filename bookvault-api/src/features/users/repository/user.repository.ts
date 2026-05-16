@@ -1,7 +1,10 @@
 import type { ProjectionType } from "mongoose";
 
 import { UserModel } from "@/features/users/model/user.model";
-import type { CreateUserInput, PublicUser } from "@/features/users/types/user.types";
+import type {
+  CreateUserInput,
+  PublicUser,
+} from "@/features/users/types/user.types";
 
 const safeProjection = { passwordHash: 0 } as const;
 
