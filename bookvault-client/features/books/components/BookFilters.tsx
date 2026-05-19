@@ -37,6 +37,8 @@ export function BookFilters({
     (key: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
       params.set(key, value);
+      // Reset to first page whenever filter or view mode changes
+      if (key !== "page") params.set("page", "1");
       router.push(`?${params.toString()}`);
     },
     [router, searchParams],
