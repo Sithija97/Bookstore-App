@@ -1,21 +1,40 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BookMarked, Eye, EyeOff, LoaderCircle } from "lucide-react";
+import { toast } from "sonner";
+import { loginApi } from "@/features/auth/services/auth.api";
+import { useAuthStore } from "@/features/auth/store/auth.store";
 import { cn } from "@/lib/utils";
 
 export function LoginForm() {
+  const router = useRouter();
+  const setAuth = useAuthStore((s) => s.setAuth);
+
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // TODO: wire up auth service
-    setTimeout(() => setIsLoading(false), 1500);
+    try {
+      const { user, tokens } = await loginApi(email, password);
+      setAuth(user, tokens.accessToken);
+      toast.success("Welcome back!", {
+        description: `Signed in as ${user.name}`,
+      });
+      router.push("/");
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Login failed. Please try again.";
+      toast.error("Sign in failed", { description: message });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
