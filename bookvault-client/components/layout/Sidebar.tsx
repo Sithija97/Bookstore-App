@@ -6,9 +6,9 @@ import { BookMarked, Home, Package, Settings, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
-  { label: "Home", href: "/", icon: Home },
-  { label: "My Orders", href: "/orders", icon: Package },
-  { label: "My Account", href: "/account", icon: User },
+  { label: "Home", href: "/", icon: Home, disabled: false },
+  { label: "My Orders", href: "/orders", icon: Package, disabled: true },
+  { label: "My Account", href: "/account", icon: User, disabled: true },
 ] as const;
 
 export function Sidebar() {
@@ -33,20 +33,30 @@ export function Sidebar() {
 
       {/* Primary nav */}
       <nav className="flex flex-1 flex-col gap-0.5 px-3">
-        {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
+        {NAV_ITEMS.map(({ label, href, icon: Icon, disabled }) => {
           const isActive =
             href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+          const baseClasses = cn(
+            "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
+            disabled
+              ? "cursor-not-allowed text-zinc-300"
+              : isActive
+                ? "bg-blue-50 font-medium text-blue-700"
+                : "font-normal text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800",
+          );
+
+          if (disabled) {
+            return (
+              <span key={href} aria-disabled="true" className={baseClasses}>
+                <Icon size={15} />
+                <span>{label}</span>
+              </span>
+            );
+          }
+
           return (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
-                isActive
-                  ? "bg-blue-50 font-medium text-blue-700"
-                  : "font-normal text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800",
-              )}
-            >
+            <Link key={href} href={href} className={baseClasses}>
               <Icon size={15} />
               <span>{label}</span>
             </Link>
