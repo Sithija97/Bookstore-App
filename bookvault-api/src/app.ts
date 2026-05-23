@@ -23,7 +23,7 @@ export function createApp() {
   app.use(cookieParser());
 
   app.get("/", (_req, res) => {
-    res.status(200).json({ message: "Welcome to BookVault API" });
+    res.status(200).json({ message: "Welcome to BookVault API updated" });
   });
 
   app.get("/health", (_req, res) => {
