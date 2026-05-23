@@ -3,6 +3,8 @@ name: Deploy API to Azure
 on:
   push:
     branches: [main]
+    paths:
+      - "bookvault-api/**"
   workflow_dispatch:
 
 env:
