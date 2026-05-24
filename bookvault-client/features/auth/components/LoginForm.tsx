@@ -84,12 +84,12 @@ export function LoginForm() {
               >
                 Password
               </label>
-              <Link
+              {/* <Link
                 href="/forgot-password"
                 className="text-xs text-zinc-500 hover:text-zinc-800 transition-colors"
               >
                 Forgot password?
-              </Link>
+              </Link> */}
             </div>
             <div className="relative">
               <input

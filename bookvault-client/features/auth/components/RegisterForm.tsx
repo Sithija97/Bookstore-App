@@ -6,7 +6,6 @@ import { useState } from "react";
 import { BookMarked, Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 import { registerApi } from "@/features/auth/services/auth.api";
-import { useAuthStore } from "@/features/auth/store/auth.store";
 import { cn } from "@/lib/utils";
 
 interface FieldErrors {
@@ -55,7 +54,6 @@ function validate(
 
 export function RegisterForm() {
   const router = useRouter();
-  const setAuth = useAuthStore((s) => s.setAuth);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -75,12 +73,11 @@ export function RegisterForm() {
 
     setIsLoading(true);
     try {
-      const { user, tokens } = await registerApi(name.trim(), email, password);
-      setAuth(user, tokens.accessToken);
+      await registerApi(name.trim(), email, password);
       toast.success("Account created!", {
-        description: `Welcome to BookVault, ${user.name}!`,
+        description: "Please sign in to continue.",
       });
-      router.push("/");
+      router.push("/login");
     } catch (err) {
       const message =
         err instanceof Error
