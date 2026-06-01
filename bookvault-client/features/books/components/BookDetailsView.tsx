@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowLeft, BookOpen, ShoppingCart, Tag } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { GENRE_COVER_STYLES } from "@/features/books/components/BookCard";
+import { BookActions } from "@/features/books/components/BookActions";
 import { cn } from "@/lib/utils";
 import type { Book } from "@/features/books/types/book.types";
 
@@ -169,40 +170,10 @@ export function BookDetailsView({ book }: BookDetailsViewProps) {
           </div>
 
           {/* Actions */}
-          <div className="flex flex-wrap gap-2.5">
-            <button
-              disabled={!book.isAvailable}
-              className={cn(
-                "inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all",
-                book.isAvailable
-                  ? "bg-zinc-900 text-white hover:bg-zinc-700 active:translate-y-px"
-                  : "cursor-not-allowed bg-zinc-100 text-zinc-400",
-              )}
-            >
-              <ShoppingCart size={14} />
-              Buy now
-            </button>
-
-            {book.rentalPrice && (
-              <button
-                disabled={!book.isAvailable}
-                className={cn(
-                  "inline-flex items-center gap-2 rounded-lg border px-5 py-2.5 text-sm font-semibold transition-all",
-                  book.isAvailable
-                    ? "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 active:translate-y-px"
-                    : "cursor-not-allowed border-zinc-100 bg-zinc-50 text-zinc-400",
-                )}
-              >
-                <BookOpen size={14} />
-                Rent book
-              </button>
-            )}
-
-            <button className="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-5 py-2.5 text-sm font-semibold text-zinc-700 transition-all hover:bg-zinc-50 active:translate-y-px">
-              <Tag size={14} />
-              Wishlist
-            </button>
-          </div>
+          <BookActions
+            isAvailable={book.isAvailable}
+            hasRentalPrice={!!book.rentalPrice}
+          />
 
           {/* Meta */}
           <div className="grid grid-cols-2 gap-3 border-t border-zinc-100 pt-4 sm:grid-cols-4">

@@ -20,6 +20,6 @@ export const useAuthStore = create<AuthState>()(
       }),
       { name: "bookvault-auth" },
     ),
-    { name: "BookVault Auth" },
+    { name: "BookVault Auth", enabled: process.env.NODE_ENV === "development" },
   ),
 );

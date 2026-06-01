@@ -22,6 +22,7 @@ export interface Book {
   availableCopies: number;
   totalCopies: number;
   isAvailable: boolean;
+  createdBy: string;
   createdAt: string;
   updatedAt: string;
 }

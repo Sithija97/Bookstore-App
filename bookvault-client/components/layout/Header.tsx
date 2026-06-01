@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Bell, LoaderCircle, LogOut, Search } from "lucide-react";
 import { toast } from "sonner";
 import { logoutApi } from "@/features/auth/services/auth.api";
@@ -18,12 +18,34 @@ function getInitials(name: string): string {
 
 export function Header() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const user = useAuthStore((s) => s.user);
   const clearAuth = useAuthStore((s) => s.clearAuth);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [searchValue, setSearchValue] = useState(searchParams.get("search") ?? "");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleSearch = useCallback(
+    (value: string) => {
+      setSearchValue(value);
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (value.trim()) {
+          params.set("search", value.trim());
+          params.delete("page");
+        } else {
+          params.delete("search");
+          params.delete("page");
+        }
+        router.push(`/?${params.toString()}`);
+      }, 400);
+    },
+    [router, searchParams],
+  );
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -66,6 +88,8 @@ export function Header() {
         <input
           type="text"
           placeholder="Search books..."
+          value={searchValue}
+          onChange={(e) => handleSearch(e.target.value)}
           className="h-8 w-150 rounded-lg border border-zinc-200 bg-zinc-50 pl-8 pr-3 text-xs text-zinc-700 placeholder:text-zinc-400 focus:border-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-200"
         />
       </div>

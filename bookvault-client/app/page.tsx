@@ -2,11 +2,11 @@ import { AppShell } from "@/components/layout/AppShell";
 import { CatalogView } from "@/features/books/components/CatalogView";
 
 interface HomePageProps {
-  searchParams: Promise<{ filter?: string; view?: string; page?: string }>;
+  searchParams: Promise<{ filter?: string; view?: string; page?: string; search?: string }>;
 }
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-  const { filter = "all", view = "grid", page = "1" } = await searchParams;
+  const { filter = "all", view = "grid", page = "1", search } = await searchParams;
 
   return (
     <AppShell>
@@ -17,7 +17,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             Discover, browse, and borrow from our collection
           </p>
         </div>
-        <CatalogView filter={filter} view={view} page={page} />
+        <CatalogView filter={filter} view={view} page={page} search={search} />
       </div>
     </AppShell>
   );
